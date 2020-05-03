@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Debug
+npm-debug.log
+
+# Compiled
+build/
+
+# dotenv
+.env
+
+# sample test files
+tests/test-myinvoice-api/files/zbdr_sample.csv
+tests/test-myinvoice-api/files/zbdrs_sample.csv
+tests/test-myinvoice-api/files/zbdr_sample.csv.pgp
+tests/test-myinvoice-api/files/zbdrs_sample.csv.pgp

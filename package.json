@@ -1,0 +1,49 @@
+{
+  "name": "nodejs-mongodb-auth",
+  "version": "1.0.0",
+  "description": "Backend node app that connects to MongoDB for user authentication.",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "nodemon",
+    "build": "rimraf ./build && tsc",
+    "start": "npm run build start:pm2",
+    "start:pm2": "npm run build && pm2 start build/index.js"
+  },
+  "homepage": "https://github.com/FormidableLabs/react-native-app-auth",
+  "keywords": [
+    "nodejs",
+    "node-js",
+    "express",
+    "auth",
+    "authentication",
+    "mongo",
+    "mongodb",
+    "appauth"
+  ],
+  "author": "Nick Persad",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^13.7.4",
+    "nodemon": "^2.0.2",
+    "rimraf": "^3.0.2",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.2"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.628.0",
+    "axios": "^0.19.2",
+    "bcrypt": "^4.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-async-handler": "^1.1.4",
+    "graylog2": "^0.2.1",
+    "moment": "^2.24.0",
+    "mongodb": "^3.5.4",
+    "mongoose": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=12.14.0",
+    "npm": ">=6.13.4"
+  }
+}
