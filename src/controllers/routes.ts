@@ -5,6 +5,7 @@ const router = express.Router();
 const log = new Log();
 
 const auth = require("../services/app/auth");
+const user = require("../services/app/user");
 
 // middleware that is specific to this router
 router.use(function timeLog(req: any, res: any, next: any) {
@@ -78,6 +79,23 @@ router.post("/api/signout", async (req: any, res: any, next: any) => {
       res.status(500);
       res.json({success: false, msg: `Invalid request.`})
     }
+  } catch (e) {
+    res.status(500);
+    res.json({success: false, msg: `catch: ${e}`})
+  }
+});
+
+
+/*
+ *   users
+ */
+router.post("/api/user", async (req: any, res: any, next: any) => {
+  const facility = `POST to /api/user`;
+
+  try {
+    const data = await user.list();
+
+    res.json(data);
   } catch (e) {
     res.status(500);
     res.json({success: false, msg: `catch: ${e}`})
