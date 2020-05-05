@@ -23,11 +23,9 @@ router.use(function timeLog(req: any, res: any, next: any) {
 });
 
 /*
- *   login
+ *   signin
  */
-router.post("/api/login", async (req: any, res: any, next: any) => {
-  const facility = `POST to /api/login`;
-
+router.post("/api/signin", async (req: any, res: any, next: any) => {
   try {
     if (typeof req.body.username !== "undefined" && typeof req.body.password !== "undefined") {
       const data = await auth.login(req.body);
@@ -47,8 +45,6 @@ router.post("/api/login", async (req: any, res: any, next: any) => {
  *   signup
  */
 router.post("/api/signup", async (req: any, res: any, next: any) => {
-  const facility = `POST to /api/signup`;
-
   try {
     if (typeof req.body.username !== "undefined" && typeof req.body.password !== "undefined") {
       const data = await auth.signup(req.body);
@@ -68,8 +64,6 @@ router.post("/api/signup", async (req: any, res: any, next: any) => {
  *   signout
  */
 router.post("/api/signout", async (req: any, res: any, next: any) => {
-  const facility = `POST to /api/signout`;
-
   try {
     if (typeof req.body.username !== "undefined") {
       const data = await auth.signout(req.body.username);
@@ -90,8 +84,6 @@ router.post("/api/signout", async (req: any, res: any, next: any) => {
  *   users
  */
 router.post("/api/user", async (req: any, res: any, next: any) => {
-  const facility = `POST to /api/user`;
-
   try {
     const data = await user.list();
 
