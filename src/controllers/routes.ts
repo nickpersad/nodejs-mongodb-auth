@@ -5,7 +5,6 @@ const router = express.Router();
 const log = new Log();
 
 const auth = require("../services/app/auth");
-const getObjects = require("../services/common/getObjects");
 
 // middleware that is specific to this router
 router.use(function timeLog(req: any, res: any, next: any) {

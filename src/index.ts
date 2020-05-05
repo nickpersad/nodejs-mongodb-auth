@@ -15,9 +15,6 @@ const mongoUtil = require("./services/common/mongoUtil");
 
 const log = new Log();
 
-// run with node --experimental-worker index.js on Node.js 10.x
-const { Worker, MessageChannel } = require("worker_threads");
-
 /**
  * https://github.com/expressjs/cors
  * Enable All CORS Requests
