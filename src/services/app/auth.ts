@@ -40,34 +40,34 @@ const checkUser = async (user: any) => {
   const params = { username: user.username };
   const doc = await UserModel.findOne(params, (err: any, doc: any) => {
     if (err) {
-      return {success: false, msg: err};
+      return { success: false, msg: err };
     }
-    return {success: true, data: doc};
+    return { success: true, data: doc };
   });
-  
+
   if (doc !== null) {
     const match = await bcrypt.compare(user.password, doc.password);
 
     if (match) {
-      return {success: true}
+      return { success: true }
     }
   }
-  return {success: false, msg: `Unable to login.`}
+  return { success: false, msg: `Unable to login.` }
 }
 
 const checkUserSession = async (session: string) => {
   const params = { id: session };
   const doc = await SessionModel.findOne(params, (err: any, doc: any) => {
     if (err) {
-      return {success: false, msg: err};
-    } 
-    return {success: true};
+      return { success: false, msg: err };
+    }
+    return { success: true };
   });
-  return {success: false};
+  return { success: false };
 }
 
 const removeSession = async (username: string) => {
-  const params = {username: username };
+  const params = { username: username };
   const res = await SessionModel.deleteOne(params);
 
   if (res.deletedCount === 1) {
@@ -125,7 +125,7 @@ module.exports = {
   },
   signout: async (username: string) => {
     await connectToMongo();
-    return await removeSession(username); 
+    return await removeSession(username);
   },
   sessionCheck: async (id: string) => {
     return checkUserSession(id);
