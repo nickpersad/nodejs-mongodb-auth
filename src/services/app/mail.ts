@@ -1,6 +1,28 @@
 const nodemailer = require("nodemailer");
+const { Worker, MessageChannel } = require("worker_threads");
+
+const runWorkers = async (sendTo: string) => {
+    return new Promise((resolve, reject) => {
+        const worker = new Worker("./src/services/app/worker.import.js", {
+            workerData: {
+                sendTo
+            }
+        });
+        worker.on('message', resolve);
+        worker.on('error', reject);
+        worker.on('exit', (code: any) => {
+            if (code !== 0)
+                reject(new Error(`Worker stopped with exit code ${code}`));
+        });
+    });
+};
 
 module.exports = {
+    queue: async (sendTo: string) => {
+        return await runWorkers(sendTo).catch(err => {
+            console.log(err)
+        });
+    },
     send: async (sendTo: string) => {
         // Generate test SMTP service account from ethereal.email
         // Only needed if you don't have a real mail account for testing

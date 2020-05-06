@@ -113,7 +113,8 @@ module.exports = {
     await connectToMongo();
     const user = await insertUser(body);
     if (user.success) {
-      await mail.send(body.username);
+      // don't wait for response from queue
+      mail.queue(body.username);
       return { success: true };
     }
     return user;
