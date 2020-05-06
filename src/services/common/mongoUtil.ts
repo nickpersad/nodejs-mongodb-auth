@@ -1,9 +1,7 @@
 import { isMainThread } from "worker_threads";
-import Log from "../common/logUtil";
 
 const mongoose = require("mongoose");
 const connection = process.env.MONGODB_CONNECTION;
-const log = new Log();
 
 let _db: any;
 
@@ -21,34 +19,22 @@ const mongoConnection = async () => {
         },
         (err: any) => {
           if (err) {
-            log.getResponse(
-              `Mongo err: ${err}`,
-              false,
-              "mongoUtil.js/connect()"
-            );
+            console.log(`Mongo err: ${err}`);
             return false;
           } else {
-            log.getResponse(
-              `Mongo connected in ${
-                isMainThread ? "main thread" : "worker thread"
-              }.`,
-              true,
-              "mongoUtil.js/connect()"
-            );
+            console.log(`Mongo connected in ${
+              isMainThread ? "main thread" : "worker thread"
+              }.`);
             return true;
           }
         }
       );
     } else {
-      log.getResponse(
-        `Mongo already connected.`,
-        true,
-        "mongoUtil.js/connect()"
-      );
+      console.log(`Mongo already connected.`);
     }
     return _db;
   } catch (e) {
-    log.getResponse(`catch: ${e}`, false, "mongoUtil.js/connect()");
+    console.log(e);
     return false;
   }
 };

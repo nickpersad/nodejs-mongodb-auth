@@ -2,7 +2,7 @@
 
 require("dotenv").config();
 
-import Log from "./services/common/logUtil";
+export { };
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -12,8 +12,6 @@ const PORT = process.env.PORT;
 const RoutesController = require("./controllers/routes");
 
 const mongoUtil = require("./services/common/mongoUtil");
-
-const log = new Log();
 
 /**
  * https://github.com/expressjs/cors
@@ -46,14 +44,10 @@ app.use("/", RoutesController);
     // Connect To Mongo
     await mongoUtil.connect();
 
-    app.listen(PORT, function() {
-      log.getResponse(`Listening on ${PORT}`, true, "Express server start");
+    app.listen(PORT, function () {
+      console.log(`Listening on ${PORT}`);
     });
   } catch (e) {
-    log.getResponse(
-      `Initial mongoUtil.connect() catch: ${e}`,
-      false,
-      "index.ts/runLockRenewal()"
-    );
+    console.log(`Initial mongoUtil.connect() catch: ${e}`);
   }
 })();

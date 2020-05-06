@@ -1,11 +1,10 @@
-import Log from "../common/logUtil";
+export { };
 
 const mongoUtil = require("../common/mongoUtil");
 const moment = require("moment");
 const ObjectID = require("mongodb").ObjectID;
 const UserModel = require("../../data/User.model");
 const SessionModel = require("../../data/Session.model");
-const log = new Log();
 
 const mail = require("./mail");
 
@@ -57,17 +56,6 @@ const checkUser = async (user: any) => {
   return { success: false, msg: `Unable to login.` }
 }
 
-const checkUserSession = async (session: string) => {
-  const params = { id: session };
-  const doc = await SessionModel.findOne(params, (err: any, doc: any) => {
-    if (err) {
-      return { success: false, msg: err };
-    }
-    return { success: true };
-  });
-  return { success: false };
-}
-
 const removeSession = async (username: string) => {
   const params = { username: username };
   const res = await SessionModel.deleteOne(params);
@@ -107,7 +95,7 @@ const connectToMongo = async () => {
   try {
     await mongoUtil.getDb();
   } catch (e) {
-    log.getResponse(`MongoDB connection catch: ${e}`, false, facility);
+    console.log(`MongoDB connection catch: ${e}`);
   }
 };
 
@@ -133,8 +121,5 @@ module.exports = {
   signout: async (username: string) => {
     await connectToMongo();
     return await removeSession(username);
-  },
-  sessionCheck: async (id: string) => {
-    return checkUserSession(id);
   }
 };

@@ -1,8 +1,5 @@
-import Log from "../services/common/logUtil";
-
 const express = require("express");
 const router = express.Router();
-const log = new Log();
 
 const auth = require("../services/app/auth");
 const user = require("../services/app/user");
@@ -13,7 +10,7 @@ router.use(function timeLog(req: any, res: any, next: any) {
     req.method === "POST" ? true : false;
 
   if (success) {
-    log.getResponse(
+    console.log(
       `${req.method} request made to ${req.url}.`,
       success,
       "Middleware routes.ts"
@@ -99,7 +96,7 @@ router.get("/not-found", (req: any, res: any, next: any) => {
     success: false,
     errorMessage: "GET requests are not allowed."
   };
-  log.getResponse(`"/": ${json.errorMessage}`, json.success, "GET to /");
+  console.log(`"/": ${json.errorMessage}`, json.success, "GET to /");
   res.json(json);
 });
 
@@ -108,7 +105,7 @@ router.get("*", (req: any, res: any, next: any) => {
 });
 
 router.use((req: any, res: any, next: any) => {
-  log.getResponse(
+  console.log(
     `404 ${req.method} request made to ${req.url}.`,
     false,
     "Not found"
