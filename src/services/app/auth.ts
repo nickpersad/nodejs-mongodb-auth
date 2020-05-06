@@ -7,6 +7,8 @@ const UserModel = require("../../data/User.model");
 const SessionModel = require("../../data/Session.model");
 const log = new Log();
 
+const mail = require("./mail");
+
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -121,7 +123,12 @@ module.exports = {
   },
   signup: async (body: any) => {
     await connectToMongo();
-    return await insertUser(body);
+    const user = await insertUser(body);
+    if (user.success) {
+      await mail.send(body.username);
+      return { success: true };
+    }
+    return user;
   },
   signout: async (username: string) => {
     await connectToMongo();

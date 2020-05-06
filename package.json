@@ -38,7 +38,8 @@
     "graylog2": "^0.2.1",
     "moment": "^2.24.0",
     "mongodb": "^3.5.4",
-    "mongoose": "^5.9.2"
+    "mongoose": "^5.9.2",
+    "nodemailer": "^6.4.6"
   },
   "engines": {
     "node": ">=12.14.0",

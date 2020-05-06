@@ -102,6 +102,10 @@ __Sample response__
 ##   PORT - Port to set Node to listen on.
 ##   APPLICATION_NAME - Name of application.
 ##   MONGODB_CONNECTION - Connection to MongoDB.
+##   EMAIL_HOST - Email hostname
+##   EMAIL_PORT - Email port
+##   EMAIL_USER - Email address/username
+##   EMAIL_PASS - Email password
 ##
 ########################################################################
 ```
