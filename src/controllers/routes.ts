@@ -131,6 +131,26 @@ router.post("/api/blitz/join", async (req: any, res: any, next: any) => {
   }
 });
 
+
+/*
+ *   shuffle deck
+ */
+router.post("/api/blitz/shuffle", async (req: any, res: any, next: any) => {
+  try {
+    if (typeof req.body.id !== "undefined") {
+      const data = await blitz.shuffle(req.body.id);
+
+      res.json(data);
+    } else {
+      res.status(500);
+      res.json({ success: false, msg: `Invalid request.` })
+    }
+  } catch (e) {
+    res.status(500);
+    res.json({ success: false, msg: `catch: ${e}` })
+  }
+});
+
 router.get("/not-found", (req: any, res: any, next: any) => {
   const json = {
     success: false,

@@ -5,6 +5,8 @@ const moment = require("moment");
 const ObjectID = require("mongodb").ObjectID;
 const BlitzGameModel = require("../../../data/BlitzGame.model");
 
+const axios = require('axios');
+
 const connectToMongo = async () => {
     try {
         await mongoUtil.getDb();
@@ -12,6 +14,20 @@ const connectToMongo = async () => {
         console.log(`MongoDB connection catch: ${e}`);
     }
 };
+
+const updateGame = async (params: any, updateObj: any) => {
+    try {
+        const updated = await BlitzGameModel.updateOne(params, updateObj);
+
+        console.log(updated);
+        if (updated.nModified > 0) {
+            return { success: true };
+        }
+        return { success: false, msg: `Couldn't join.` };
+    } catch (e) {
+        return { success: false, msg: `catch: ${e}` };
+    }
+}
 
 const insertGameId = async (user: string) => {
     const timestamp = Math.floor(new Date().getTime() / 1000);
@@ -21,7 +37,8 @@ const insertGameId = async (user: string) => {
         _id: objectId,
         id: objectId,
         initialUser: user,
-        users: [user]
+        users: [user],
+        deckId: ''
     }
 
     try {
@@ -50,19 +67,28 @@ module.exports = {
         const data = await BlitzGameModel.findOne(params);
 
         if (data) {
-            try {
-                const updated = await BlitzGameModel.updateOne(params, {
-                    $addToSet: {
-                        users: [user]
-                    }
-                });
-                if (updated.nModified > 0) {
-                    return { success: true, id: data.id };
+            return await updateGame(params, {
+                $addToSet: {
+                    users: [user]
                 }
-                return { success: false, msg: `Couldn't join.` };
-            } catch (e) {
-                return { success: false, msg: `catch: ${e}` };
+            });
+        }
+    },
+    shuffle: async (id: string) => {
+        await connectToMongo();
+        const params = { id: id };
+
+        try {
+            const deck = await axios.get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1");
+
+            if (deck.data.success) {
+                return await updateGame(params, {
+                    deckId: deck.data.deck_id
+                });
             }
+            return { success: false, msg: deck };
+        } catch (e) {
+            return { success: false, msg: `catch: ${e}` };
         }
     }
 };
