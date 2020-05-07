@@ -3,6 +3,7 @@ const router = express.Router();
 
 const auth = require("../services/app/auth");
 const user = require("../services/app/user");
+const blitz = require("../services/app/deckofcards/blitz");
 
 // middleware that is specific to this router
 router.use(function timeLog(req: any, res: any, next: any) {
@@ -30,11 +31,11 @@ router.post("/api/signin", async (req: any, res: any, next: any) => {
       res.json(data);
     } else {
       res.status(500);
-      res.json({success: false, msg: `Invalid request.`})
+      res.json({ success: false, msg: `Invalid request.` })
     }
   } catch (e) {
     res.status(500);
-    res.json({success: false, msg: `catch: ${e}`})
+    res.json({ success: false, msg: `catch: ${e}` })
   }
 });
 
@@ -49,11 +50,11 @@ router.post("/api/signup", async (req: any, res: any, next: any) => {
       res.json(data);
     } else {
       res.status(500);
-      res.json({success: false, msg: `Invalid request.`})
+      res.json({ success: false, msg: `Invalid request.` })
     }
   } catch (e) {
     res.status(500);
-    res.json({success: false, msg: `catch: ${e}`})
+    res.json({ success: false, msg: `catch: ${e}` })
   }
 });
 
@@ -68,11 +69,11 @@ router.post("/api/signout", async (req: any, res: any, next: any) => {
       res.json(data);
     } else {
       res.status(500);
-      res.json({success: false, msg: `Invalid request.`})
+      res.json({ success: false, msg: `Invalid request.` })
     }
   } catch (e) {
     res.status(500);
-    res.json({success: false, msg: `catch: ${e}`})
+    res.json({ success: false, msg: `catch: ${e}` })
   }
 });
 
@@ -87,7 +88,46 @@ router.post("/api/user", async (req: any, res: any, next: any) => {
     res.json(data);
   } catch (e) {
     res.status(500);
-    res.json({success: false, msg: `catch: ${e}`})
+    res.json({ success: false, msg: `catch: ${e}` })
+  }
+});
+
+
+/*
+ *   new game
+ */
+router.post("/api/blitz/new", async (req: any, res: any, next: any) => {
+  try {
+    if (typeof req.body.username !== "undefined") {
+      const data = await blitz.create(req.body.username);
+
+      res.json(data);
+    } else {
+      res.status(500);
+      res.json({ success: false, msg: `Invalid request.` })
+    }
+  } catch (e) {
+    res.status(500);
+    res.json({ success: false, msg: `catch: ${e}` })
+  }
+});
+
+/*
+ *   join game
+ */
+router.post("/api/blitz/join", async (req: any, res: any, next: any) => {
+  try {
+    if (typeof req.body.username !== "undefined" && typeof req.body.initialUser !== "undefined") {
+      const data = await blitz.join(req.body.initialUser, req.body.username);
+
+      res.json(data);
+    } else {
+      res.status(500);
+      res.json({ success: false, msg: `Invalid request.` })
+    }
+  } catch (e) {
+    res.status(500);
+    res.json({ success: false, msg: `catch: ${e}` })
   }
 });
 

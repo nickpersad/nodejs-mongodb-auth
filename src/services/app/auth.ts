@@ -91,7 +91,6 @@ const createSession = async (user: any) => {
 }
 
 const connectToMongo = async () => {
-  const facility = "auth.ts/connectToMongo()";
   try {
     await mongoUtil.getDb();
   } catch (e) {
