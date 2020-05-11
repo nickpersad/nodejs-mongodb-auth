@@ -4,6 +4,8 @@ const router = express.Router();
 const auth = require("../services/app/auth");
 const user = require("../services/app/user");
 
+const session = require('express-session');
+
 // middleware that is specific to this router
 router.use(function timeLog(req: any, res: any, next: any) {
   const success =
@@ -19,6 +21,17 @@ router.use(function timeLog(req: any, res: any, next: any) {
   next();
 });
 
+router.use(session({
+  name: process.env.SESS_NAME,
+  secret: process.env.SESS_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: parseInt(process.env.SESS_MAXAGE),
+    sameSite: true
+  }
+}));
+
 /*
  *   signin
  */
@@ -27,14 +40,18 @@ router.post("/api/signin", async (req: any, res: any, next: any) => {
     if (typeof req.body.username !== "undefined" && typeof req.body.password !== "undefined") {
       const data = await auth.login(req.body);
 
+      if (data.success) {
+        req.session.userId = data.id;
+      }
+
       res.json(data);
     } else {
       res.status(500);
-      res.json({success: false, msg: `Invalid request.`})
+      res.json({ success: false, msg: `Invalid request.` })
     }
   } catch (e) {
     res.status(500);
-    res.json({success: false, msg: `catch: ${e}`})
+    res.json({ success: false, msg: `catch: ${e}` })
   }
 });
 
@@ -49,11 +66,11 @@ router.post("/api/signup", async (req: any, res: any, next: any) => {
       res.json(data);
     } else {
       res.status(500);
-      res.json({success: false, msg: `Invalid request.`})
+      res.json({ success: false, msg: `Invalid request.` })
     }
   } catch (e) {
     res.status(500);
-    res.json({success: false, msg: `catch: ${e}`})
+    res.json({ success: false, msg: `catch: ${e}` })
   }
 });
 
@@ -63,16 +80,23 @@ router.post("/api/signup", async (req: any, res: any, next: any) => {
 router.post("/api/signout", async (req: any, res: any, next: any) => {
   try {
     if (typeof req.body.username !== "undefined") {
+      req.session.destroy((err: any) => {
+        if (err) {
+          return res.redirect('/');
+        }
+        res.clearCookie('sId');
+      });
+      
       const data = await auth.signout(req.body.username);
 
       res.json(data);
     } else {
       res.status(500);
-      res.json({success: false, msg: `Invalid request.`})
+      res.json({ success: false, msg: `Invalid request.` })
     }
   } catch (e) {
     res.status(500);
-    res.json({success: false, msg: `catch: ${e}`})
+    res.json({ success: false, msg: `catch: ${e}` })
   }
 });
 
@@ -87,7 +111,7 @@ router.post("/api/user", async (req: any, res: any, next: any) => {
     res.json(data);
   } catch (e) {
     res.status(500);
-    res.json({success: false, msg: `catch: ${e}`})
+    res.json({ success: false, msg: `catch: ${e}` })
   }
 });
 
