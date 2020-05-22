@@ -12,7 +12,6 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const insertUser = async (user: any) => {
-  const facility = "home.ts/getFromMongo()";
   const timestamp = Math.floor(new Date().getTime() / 1000);
   const objectId = new ObjectID(timestamp);
   const hash = bcrypt.hashSync(user.password, saltRounds);
@@ -67,7 +66,6 @@ const removeSession = async (username: string) => {
 }
 
 const createSession = async (user: any) => {
-  const facility = "auth.ts/createSession()";
   const timestamp = Math.floor(new Date().getTime() / 1000);
   const objectId = new ObjectID(timestamp);
   const document = {
@@ -91,7 +89,6 @@ const createSession = async (user: any) => {
 }
 
 const connectToMongo = async () => {
-  const facility = "auth.ts/connectToMongo()";
   try {
     await mongoUtil.getDb();
   } catch (e) {

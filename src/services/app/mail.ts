@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const { Worker, MessageChannel } = require("worker_threads");
+const { Worker } = require("worker_threads");
 
 const runWorkers = async (sendTo: string) => {
     return new Promise((resolve, reject) => {
@@ -24,10 +24,6 @@ module.exports = {
         });
     },
     send: async (sendTo: string) => {
-        // Generate test SMTP service account from ethereal.email
-        // Only needed if you don't have a real mail account for testing
-        const testAccount = await nodemailer.createTestAccount();
-
         // create reusable transporter object using the default SMTP transport
         const transporter = nodemailer.createTransport({
             host: process.env.EMAIL_HOST,
