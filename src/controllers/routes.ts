@@ -4,12 +4,11 @@ const router = express.Router();
 const auth = require("../services/app/auth");
 const user = require("../services/app/user");
 
-const session = require('express-session');
+const session = require("express-session");
 
 // middleware that is specific to this router
 router.use(function timeLog(req: any, res: any, next: any) {
-  const success =
-    req.method === "POST" ? true : false;
+  const success = req.method === "POST" ? true : false;
 
   if (success) {
     console.log(
@@ -21,23 +20,28 @@ router.use(function timeLog(req: any, res: any, next: any) {
   next();
 });
 
-router.use(session({
-  name: process.env.SESS_NAME,
-  secret: process.env.SESS_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: parseInt(process.env.SESS_MAXAGE),
-    sameSite: true
-  }
-}));
+router.use(
+  session({
+    name: process.env.SESS_NAME,
+    secret: process.env.SESS_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: parseInt(process.env.SESS_MAXAGE),
+      sameSite: true,
+    },
+  })
+);
 
 /*
  *   signin
  */
 router.post("/api/signin", async (req: any, res: any, next: any) => {
   try {
-    if (typeof req.body.username !== "undefined" && typeof req.body.password !== "undefined") {
+    if (
+      typeof req.body.username !== "undefined" &&
+      typeof req.body.password !== "undefined"
+    ) {
       const data = await auth.login(req.body);
 
       if (data.success) {
@@ -47,11 +51,11 @@ router.post("/api/signin", async (req: any, res: any, next: any) => {
       res.json(data);
     } else {
       res.status(500);
-      res.json({ success: false, msg: `Invalid request.` })
+      res.json({ success: false, msg: "Invalid request." });
     }
   } catch (e) {
     res.status(500);
-    res.json({ success: false, msg: `catch: ${e}` })
+    res.json({ success: false, msg: `catch: ${e}` });
   }
 });
 
@@ -60,17 +64,20 @@ router.post("/api/signin", async (req: any, res: any, next: any) => {
  */
 router.post("/api/signup", async (req: any, res: any, next: any) => {
   try {
-    if (typeof req.body.username !== "undefined" && typeof req.body.password !== "undefined") {
+    if (
+      typeof req.body.username !== "undefined" &&
+      typeof req.body.password !== "undefined"
+    ) {
       const data = await auth.signup(req.body);
 
       res.json(data);
     } else {
       res.status(500);
-      res.json({ success: false, msg: `Invalid request.` })
+      res.json({ success: false, msg: "Invalid request." });
     }
   } catch (e) {
     res.status(500);
-    res.json({ success: false, msg: `catch: ${e}` })
+    res.json({ success: false, msg: `catch: ${e}` });
   }
 });
 
@@ -82,24 +89,23 @@ router.post("/api/signout", async (req: any, res: any, next: any) => {
     if (typeof req.body.username !== "undefined") {
       req.session.destroy((err: any) => {
         if (err) {
-          return res.redirect('/');
+          return res.redirect("/");
         }
-        res.clearCookie('sId');
+        res.clearCookie("sId");
       });
-      
+
       const data = await auth.signout(req.body.username);
 
       res.json(data);
     } else {
       res.status(500);
-      res.json({ success: false, msg: `Invalid request.` })
+      res.json({ success: false, msg: "Invalid request." });
     }
   } catch (e) {
     res.status(500);
-    res.json({ success: false, msg: `catch: ${e}` })
+    res.json({ success: false, msg: `catch: ${e}` });
   }
 });
-
 
 /*
  *   users
@@ -111,14 +117,14 @@ router.post("/api/user", async (req: any, res: any, next: any) => {
     res.json(data);
   } catch (e) {
     res.status(500);
-    res.json({ success: false, msg: `catch: ${e}` })
+    res.json({ success: false, msg: `catch: ${e}` });
   }
 });
 
 router.get("/not-found", (req: any, res: any, next: any) => {
   const json = {
     success: false,
-    errorMessage: "GET requests are not allowed."
+    errorMessage: "GET requests are not allowed.",
   };
   console.log(`"/": ${json.errorMessage}`, json.success, "GET to /");
   res.json(json);
@@ -136,7 +142,7 @@ router.use((req: any, res: any, next: any) => {
   );
   res.status(404).send({
     status: 404,
-    error: `Not found`
+    error: `Not found`,
   });
 });
 

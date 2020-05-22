@@ -2,19 +2,19 @@ const nodemailer = require("nodemailer");
 const { Worker } = require("worker_threads");
 
 const runWorkers = async (sendTo: string) => {
-    return new Promise((resolve, reject) => {
-        const worker = new Worker("./src/services/app/worker.import.js", {
-            workerData: {
-                sendTo
-            }
-        });
-        worker.on('message', resolve);
-        worker.on('error', reject);
-        worker.on('exit', (code: any) => {
-            if (code !== 0)
-                reject(new Error(`Worker stopped with exit code ${code}`));
-        });
+  return new Promise((resolve, reject) => {
+    const worker = new Worker("./src/services/app/worker.import.js", {
+      workerData: {
+        sendTo,
+      },
     });
+    worker.on("message", resolve);
+    worker.on("error", reject);
+    worker.on("exit", (code: any) => {
+      if (code !== 0)
+        reject(new Error(`Worker stopped with exit code ${code}`));
+    });
+  });
 };
 
 module.exports = {
@@ -34,18 +34,18 @@ module.exports = {
             }
         });
 
-        // send mail with defined transport object
-        const info = await transporter.sendMail({
-            from: '"Nick Persad" <hi@nickpersad.com>', // sender address
-            to: sendTo, // list of receivers
-            subject: "Thank you for signing up ✔", // Subject line
-            text: "Thank you for signing up to my demo app", // plain text body
-            html: "<b>Thank you for signing up to my demo app</b>" // html body
-        });
+    // send mail with defined transport object
+    const info = await transporter.sendMail({
+      from: '"Nick Persad" <hi@nickpersad.com>', // sender address
+      to: sendTo, // list of receivers
+      subject: "Thank you for signing up ✔", // Subject line
+      text: "Thank you for signing up to my demo app", // plain text body
+      html: "<b>Thank you for signing up to my demo app</b>", // html body
+    });
 
-        if (info.accepted[0] === sendTo) {
-            return { success: true };
-        }
-        return { success: false, msg: info.response };
+    if (info.accepted[0] === sendTo) {
+      return { success: true };
     }
+    return { success: false, msg: info.response };
+  },
 };

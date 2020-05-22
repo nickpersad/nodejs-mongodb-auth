@@ -1,4 +1,4 @@
-export { };
+export {};
 
 const mongoUtil = require("../common/mongoUtil");
 const moment = require("moment");
@@ -8,7 +8,7 @@ const SessionModel = require("../../data/Session.model");
 
 const mail = require("./mail");
 
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 const insertUser = async (user: any) => {
@@ -19,22 +19,25 @@ const insertUser = async (user: any) => {
     _id: objectId,
     id: objectId,
     username: user.username,
-    password: hash
-  }
+    password: hash,
+  };
 
   try {
-    return await UserModel.collection.insertOne(document).then((result: any) => {
-      return { success: true, id: document.id };
-    }).catch((err: any) => {
-      if (err.code === 11000) {
-        return { success: false, msg: `User already exists.` }
-      }
-      return { success: false, msg: err.errmsg }
-    })
+    return await UserModel.collection
+      .insertOne(document)
+      .then((result: any) => {
+        return { success: true, id: document.id };
+      })
+      .catch((err: any) => {
+        if (err.code === 11000) {
+          return { success: false, msg: `User already exists.` };
+        }
+        return { success: false, msg: err.errmsg };
+      });
   } catch (e) {
     return { success: false, msg: `catch: ${e}` };
   }
-}
+};
 
 const checkUser = async (user: any) => {
   const params = { username: user.username };
@@ -49,11 +52,11 @@ const checkUser = async (user: any) => {
     const match = await bcrypt.compare(user.password, doc.password);
 
     if (match) {
-      return { success: true }
+      return { success: true };
     }
   }
-  return { success: false, msg: `Unable to login.` }
-}
+  return { success: false, msg: `Unable to login.` };
+};
 
 const removeSession = async (username: string) => {
   const params = { username: username };
@@ -63,7 +66,7 @@ const removeSession = async (username: string) => {
     return { success: true, msg: `Session for ${username} removed.` };
   }
   return { success: false, msg: `Session for ${username} was not removed.` };
-}
+};
 
 const createSession = async (user: any) => {
   const timestamp = Math.floor(new Date().getTime() / 1000);
@@ -71,22 +74,25 @@ const createSession = async (user: any) => {
   const document = {
     _id: objectId,
     id: objectId,
-    username: user.username
-  }
+    username: user.username,
+  };
 
   try {
-    return await SessionModel.collection.insertOne(document).then((result: any) => {
-      return { success: true, id: document.id };
-    }).catch((err: any) => {
-      if (err.code === 11000) {
-        return { success: false, msg: `Session already exists.` }
-      }
-      return { success: false, msg: err.errmsg }
-    })
+    return await SessionModel.collection
+      .insertOne(document)
+      .then((result: any) => {
+        return { success: true, id: document.id };
+      })
+      .catch((err: any) => {
+        if (err.code === 11000) {
+          return { success: false, msg: `Session already exists.` };
+        }
+        return { success: false, msg: err.errmsg };
+      });
   } catch (e) {
     return { success: false, msg: `catch: ${e}` };
   }
-}
+};
 
 const connectToMongo = async () => {
   try {
@@ -119,5 +125,5 @@ module.exports = {
   signout: async (username: string) => {
     await connectToMongo();
     return await removeSession(username);
-  }
+  },
 };

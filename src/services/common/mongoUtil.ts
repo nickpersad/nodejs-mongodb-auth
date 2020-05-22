@@ -15,16 +15,18 @@ const mongoConnection = async () => {
           useUnifiedTopology: true,
           keepAlive: true,
           useCreateIndex: true,
-          keepAliveInitialDelay: 300000
+          keepAliveInitialDelay: 300000,
         },
         (err: any) => {
           if (err) {
             console.log(`Mongo err: ${err}`);
             return false;
           } else {
-            console.log(`Mongo connected in ${
-              isMainThread ? "main thread" : "worker thread"
-              }.`);
+            console.log(
+              `Mongo connected in ${
+                isMainThread ? "main thread" : "worker thread"
+              }.`
+            );
             return true;
           }
         }
@@ -48,5 +50,5 @@ module.exports = {
       return _db;
     }
     return await mongoConnection();
-  }
+  },
 };
