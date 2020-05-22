@@ -6,9 +6,9 @@ class Log {
   ) {
     const response = {
       message,
-      success: success
+      success: success,
     };
-    
+
     const additionalFields = {
       application_name: process.env.APPLICATION_NAME,
       source: process.env.SERVER,
@@ -16,7 +16,7 @@ class Log {
       org_key: "none",
       who_am_i: "SYSTEM",
       session_id: "none",
-      dwopen_server_id: "none"
+      dwopen_server_id: "none",
     };
     try {
       if (success) {

@@ -2,7 +2,7 @@
 
 require("dotenv").config();
 
-export { };
+export {};
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -25,7 +25,7 @@ app.use(cors());
  */
 app.use(
   bodyParser.urlencoded({
-    extended: true
+    extended: true,
   })
 );
 
